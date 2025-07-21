@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Handmade Products - Shop</title>
+<style>
+  body {
+    margin: 0;
+    font-family: 'Arial', sans-serif;
+    background-image: url('https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1350&q=80');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    color: #333;
+  }
+
+  body::before {
+    position: relative;
+    z-index: 1;
+  }
+  body > * {
+    position: relative;
+    z-index: 1;
+  }
+
+  nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #a0522d;
+    padding: 15px 40px;
+  }
+  .nav-links {
+    display: flex;
+    gap: 32px;
+  }
+  nav a {
+    color: #fff;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 1.1em;
+    transition: color 0.3s;
+  }
+  nav a:hover {
+  }
+
+  .btn {
+    padding: 9px 24px;
+    border-radius: 25px;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 1em;
+    border: 2px solid #fff;
+    margin-left: 18px;
+    transition: background 0.3s, color 0.3s;
+    cursor: pointer;
+  }
+  .btn:hover {
+    background-color: #fff;
+    color: #a0522d;
+  }
+
+  .header {
+    text-align: center;
+    padding: 50px 20px;
+    border-radius: 28px;
+    margin: 48px auto 28px auto;
+    max-width: 900px;
+  }
+
+  h1 {
+    font-size: 3em;
+    margin-bottom: 18px;
+    color: #fff;
+    font-weight: bold;
+  }
+  .header p {
+    font-size: 1.2em;
+    color: #ffff;
+    margin-bottom: 28px;
+  }
+
+  .products {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    padding: 12px 0 40px 0;
+    gap: 48px;
+  }
+  .product-card {
+    
+    border-radius: 20px;
+    width: 300px;
+    overflow: hidden;
+    text-align: center;
+    transition: transform 0.2s, box-shadow 0.2s;
+    padding: 20px 0 18px 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .product-card:hover {
+    transform: scale(1.045);
+    box-shadow: 0 4px 24px #a0522d33;
+  }
+  .product-img {
+    width: 130px;
+    height: 130px;
+    object-fit: cover;
+    border-radius: 16px;
+    margin-bottom: 12px;
+    
+    background: #fff4e6;
+  }
+  .product-title {
+    font-size: 1.1em;
+    margin: 0;
+    color: #fff;
+    font-weight: bold;
+    letter-spacing: 0.2px;
+    margin-top: 10px;
+  }
+  @media(max-width: 900px) {
+    nav {
+      flex-direction: column;
+      gap: 10px;
+      padding: 15px 10px;
+    }
+    .header {
+      max-width: 95vw;
+      margin: 32px 2vw 18px 2vw;
+    }
+    .products {
+      flex-direction: column;
+      align-items: center;
+      gap: 28px;
+    }
+  }
+</style>
+</head>
+<body>
+
+<!-- Navigation -->
+<nav>
+  <div class="nav-links">
+    <a href="#">Home</a>
+    <a href="#">Products</a>
+    <a href="#">About</a>
+    <a href="#">Contact</a>
+  </div>
+  <a href="login.html" class="btn">Login / Register</a>
+</nav>
+
+<!-- Header -->
+<div class="header">
+  <h1>Welcome to Handmade Creations</h1>
+  <p>Unique, handcrafted products just for you!</p>
+</div>
+
+<!-- Products Showcase -->
+<div class="products">
+   <div class="product-card">
+    <img src="file:///C:/Users/WELCOME/Downloads/photo-1609881583302-61548332039c.avif" class="product-img" alt="Handmade Vase" />
+    <div class="product-title">Handmade Vase</div>
+  </div>
+  <div class="product-card">
+    <img src="file:///C:/Users/WELCOME/Downloads/photo-1609881583302-61548332039c.avif" class="product-img" alt="Knitted Scarf" />
+    <div class="product-title">Knitted Scarf</div>
+  </div>
+  <div class="product-card">
+    <img src="file:///C:/Users/WELCOME/Downloads/photo-1609881583302-61548332039c.avif" class="product-img" alt="Wooden Bowl" />
+    <div class="product-title">Wooden Bowl</div>
+  </div>
+  <div class="product-card">
+    <img src="file:///C:/Users/WELCOME/Downloads/photo-1609881583302-61548332039c.avif" class="product-img" alt="Ceramic Mug" />
+    <div class="product-title">Ceramic Mug</div>
+  </div>
+  <div class="product-card">
+    <img src="file:///C:/Users/WELCOME/Downloads/photo-1609881583302-61548332039c.avif" class="product-img" alt="Handwoven Basket" />
+    <div class="product-title">Handwoven Basket</div>
+  </div>
+  <div class="product-card">
+    <img src="file:///C:/Users/WELCOME/Downloads/photo-1609881583302-61548332039c.avif" class="product-img" alt="Beaded Necklace" />
+    <div class="product-title">Beaded Necklace</div>
+  </div>
+  <div class="product-card">
+    <img src="file:///C:/Users/WELCOME/Downloads/photo-1609881583302-61548332039c.avif" class="product-img" alt="Crochet Toy" />
+    <div class="product-title">Crochet Toy</div>
+  </div>
+  <div class="product-card">
+    <img src="file:///C:/Users/WELCOME/Downloads/photo-1609881583302-61548332039c.avif" class="product-img" alt="Leather Wallet" />
+    <div class="product-title">Leather Wallet</div>
+  </div>
+</div>
+
+</body>
+</html>
