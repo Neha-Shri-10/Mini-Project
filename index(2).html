@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Virtual Marketplace for Local Artisans</title>
+<style>
+  body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #f7f7f7;
+  }
+  /* Header styles */
+  header {
+    position: relative;
+    width: 100%;
+    height: 80vh;
+    background-image: url('https://images.unsplash.com/photo-1506744038136-46273834b3fb?ixlib=rb-4.0.3&auto=format&fit=crop&w=1600&q=80');
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+  }
+  /* Overlay for better text readability */
+  header::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0,0,0,0.4);
+    z-index: 1;
+  }
+  /* Title styles */
+  h1 {
+    position: relative;
+    color: #fff;
+    font-size: 2.5em;
+    text-align: center;
+    padding: 0 20px;
+    z-index: 2;
+  }
+  /* Login button styles container */
+  .top-right {
+    position: absolute;
+    top: 20px;
+    right: 30px;
+    z-index: 2;
+  }
+  /* Style for the login link/button */
+  .top-right a {
+    text-decoration: none;
+    background-color: #28a745;
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 4px;
+    font-weight: bold;
+    transition: background-color 0.3s;
+  }
+  .top-right a:hover {
+    background-color: #218838;
+  }
+  /* Explore button styles */
+  .explore-btn {
+    position: absolute;
+    bottom: 60px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 2;
+    background-color: #ffc107;
+    color: #343a40;
+    padding: 16px 32px;
+    border: none;
+    border-radius: 6px;
+    font-size: 1.1em;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.3s;
+    text-decoration: none;
+  }
+  .explore-btn:hover {
+    background-color: #e0a800;
+  }
+  @media(max-width: 768px){
+    h1 {
+      font-size: 2em;
+    }
+    .top-right {
+      top: 10px;
+      right: 15px;
+    }
+    .explore-btn {
+      padding: 12px 24px;
+      font-size: 1em;
+      bottom: 30px;
+    }
+    header {
+      height: 55vh;
+    }
+  }
+  /* Product grid styles */
+  .product-section {
+    background: #f7f7f7;
+    padding-top: 20px;
+  }
+  h2 {
+    margin: 40px 0 20px;
+    text-align: center;
+    color: #343a40;
+  }
+  .product-grid {
+    display: grid;
+    gap: 24px;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    max-width: 1200px;
+    margin: 0 auto 60px auto;
+    padding: 0 20px;
+  }
+  .product-card {
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 2px 16px rgba(0,0,0,.07);
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transition: box-shadow 0.2s;
+  }
+  .product-card:hover {
+    box-shadow: 0 4px 24px rgba(0,0,0,.13);
+  }
+  .product-image {
+    width: 160px;
+    height: 160px;
+    object-fit: cover;
+    border-radius: 8px;
+    margin-bottom: 14px;
+    background: #eee;
+  }
+  .product-name {
+    font-size: 1.2em;
+    font-weight: bold;
+    color: #222;
+    margin-bottom: 8px;
+    text-align: center;
+  }
+  .product-price {
+    color: #28a745;
+    font-size: 1.1em;
+    margin-bottom: 8px;
+  }
+  .product-author {
+    color: #555;
+    font-size: 0.98em;
+    margin-bottom: 4px;
+  }
+  @media(max-width:600px){
+    .product-card {
+      padding: 16px;
+    }
+    .product-image {
+      width: 100px;
+      height: 100px;
+    }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="top-right">
+    <a href="login.html">Login</a>
+  </div>
+  <h1>VIRTUAL MARKETPLACE FOR LOCAL ARTISANS</h1>
+  <a href="#explore-products" class="explore-btn">Explore Products</a>
+</header>
+
+<div class="product-section" id="explore-products">
+  <h2>Featured Products</h2>
+  <div class="product-grid">
+    <!-- Example product card 1 -->
+    <div class="product-card">
+      <img class="product-image" src="https://images.unsplash.com/photo-1464983953574-0892a716854b?auto=format&fit=crop&w=400&q=80" alt="Handmade Mug"/>
+      <div class="product-name">Handmade Ceramic Mug</div>
+      <div class="product-price">$18.00</div>
+      <div class="product-author">By: Asha Verma</div>
+    </div>
+    <!-- Example product card 2 -->
+    <div class="product-card">
+      <img class="product-image" src="https://images.unsplash.com/photo-1519125323398-675f0ddb6308?auto=format&fit=crop&w=400&q=80" alt="Woven Basket"/>
+      <div class="product-name">Woven Basket</div>
+      <div class="product-price">$25.00</div>
+      <div class="product-author">By: Ravi Kumar</div>
+    </div>
+    <!-- Example product card 3 -->
+    <div class="product-card">
+      <img class="product-image" src="https://images.unsplash.com/photo-1502086223501-7ea6ecd79368?auto=format&fit=crop&w=400&q=80" alt="Embroidered Cushion"/>
+      <div class="product-name">Embroidered Cushion</div>
+      <div class="product-price">$32.00</div>
+      <div class="product-author">By: Meera Joshi</div>
+    </div>
+    <!-- Example product card 4 -->
+    <div class="product-card">
+      <img class="product-image" src="https://images.unsplash.com/photo-1454023492550-5696f8ff10e1?auto=format&fit=crop&w=400&q=80" alt="Wooden Sculpture"/>
+      <div class="product-name">Wooden Sculpture</div>
+      <div class="product-price">$40.00</div>
+      <div class="product-author">By: Suresh Patel</div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
