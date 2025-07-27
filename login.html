@@ -1,98 +1,88 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Login Page</title>
-<style>
-  body {
-    font-family: Arial, sans-serif;
-    background-color: #f8f9fa;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    height: 100vh;
-    align-items: center;
-    justify-content: center;
-  }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Login - Artisans Bazaar</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f3f4f6;
+      margin: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
 
-  .login-container {
-    background-color: #fff;
-    padding: 40px;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-    max-width: 400px;
-    width: 100%;
-  }
+    .login-container {
+      background-color: #fff;
+      padding: 40px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      width: 100%;
+      max-width: 400px;
+      text-align: center;
+    }
 
-  h2 {
-    text-align: center;
-    margin-bottom: 20px;
-    color: #333;
-  }
+    .login-container h2 {
+      margin-bottom: 30px;
+      color: #2c7a7b;
+    }
 
-  form {
-    display: flex;
-    flex-direction: column;
-  }
+    input {
+      width: 100%;
+      padding: 14px;
+      margin: 10px 0;
+      border: 2px solid #ccc;
+      border-radius: 8px;
+      font-size: 1em;
+      outline: none;
+    }
 
-  label {
-    margin-bottom: 8px;
-    font-weight: bold;
-  }
+    input:focus {
+      border-color: #38b2ac;
+    }
 
-  input[type="text"],
-  input[type="password"] {
-    padding: 10px;
-    margin-bottom: 15px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-  }
+    .login-btn {
+      width: 100%;
+      padding: 14px;
+      background-color: #2c7a7b;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 1em;
+      cursor: pointer;
+      margin-top: 15px;
+    }
 
-  button {
-    padding: 10px;
-    background-color: #28a745;
-    color: #fff;
-    border: none;
-    border-radius: 4px;
-    font-size: 1em;
-    cursor: pointer;
-    transition: background-color 0.3s;
-  }
+    .login-btn:hover {
+      background-color: #2d9e9e;
+    }
 
-  button:hover {
-    background-color: #218838;
-  }
+    .signup-link {
+      margin-top: 20px;
+      display: block;
+      text-decoration: none;
+      color: #2c7a7b;
+    }
 
-  /* Optional: link to go back */
-  .back-link {
-    display: block;
-    margin-top: 15px;
-    text-align: center;
-    text-decoration: none;
-    color: #007bff;
-  }
-
-  .back-link:hover {
-    text-decoration: underline;
-  }
-</style>
+    .signup-link:hover {
+      text-decoration: underline;
+    }
+  </style>
 </head>
 <body>
 
-<div class="login-container">
-  <h2>Login to Your Account</h2>
-  <form action="#" method="POST">
-    <label for="username">Username or Email</label>
-    <input type="text" id="username" name="username" required />
-
-    <label for="password">Password</label>
-    <input type="password" id="password" name="password" required />
-
-    <button type="submit">Login</button>
-  </form>
-  <a href="index.html" class="back-link">Back to Home</a>
-</div>
+  <div class="login-container">
+    <h2>Login</h2>
+    <form>
+      <input type="text" placeholder="Username" required />
+      <input type="password" placeholder="Password" required />
+      <button class="login-btn" type="submit">Login</button>
+      <a class="signup-link" href="#">Don't have an account? Sign up</a>
+    </form>
+  </div>
 
 </body>
 </html>
