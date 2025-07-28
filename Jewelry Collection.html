@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Gleam – Jewelry Collection</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f8f4f0;
+      color: #333;
+    }
+
+    /* Header */
+    header {
+      background-color: #fff;
+      padding: 16px 40px;
+      display: flex;
+      justify-content: center; /* Center the header content */
+      align-items: center;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    }
+
+    header h1 {
+      font-size: 22px;
+      margin: 0;
+      color: #4d4d4d;
+    }
+
+    /* Search Bar */
+    .search-bar {
+      margin: 20px auto;
+      text-align: center;
+    }
+
+    .search-bar input {
+      width: 70%;
+      padding: 12px;
+      border-radius: 8px;
+      border: none;
+      background-color: #f0eae4;
+      font-size: 16px;
+      outline: none;
+    }
+
+    .search-bar input:focus {
+      border-color: #38b2ac;
+    }
+
+    /* Banner */
+    .banner {
+      margin: 16px;
+      border-radius: 12px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .banner img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    .banner-text {
+      position: absolute;
+      bottom: 10px;
+      left: 20px;
+      color: white;
+      font-weight: bold;
+      font-size: 20px;
+      text-shadow: 0 0 5px rgba(0,0,0,0.5);
+    }
+
+    /* Section Title */
+    .section-title {
+      margin: 24px 16px;
+      font-size: 24px;
+      font-weight: 600;
+      color: #333;
+      text-align: center;
+    }
+
+    /* Product List */
+    .product-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 20px;
+      padding: 0 16px;
+      margin-bottom: 40px;
+    }
+
+    /* Product Card */
+    .product-card {
+      background: #fff;
+      border-radius: 12px;
+      padding: 20px;
+      text-align: center;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      transition: transform 0.3s;
+    }
+
+    .product-card:hover {
+      transform: translateY(-5px);
+    }
+
+    .product-card img {
+      width: 100%;
+      height: 150px;
+      object-fit: cover;
+      border-radius: 10px;
+    }
+
+    .product-name {
+      font-size: 14px;
+      margin-top: 10px;
+      color: #444;
+    }
+
+    .product-price {
+      font-weight: bold;
+      color: #b67f4c;
+    }
+
+    @media (max-width: 768px) {
+      .search-bar input {
+        width: 90%;
+      }
+
+      .product-list {
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>Gleam</h1>
+  </header>
+
+  <div class="search-bar">
+    <input type="text" placeholder="Search for jewelry...">
+  </div>
+
+  <div class="banner">
+    <img src="https://via.placeholder.com/800x400?text=Featured+Jeweler+Sophia+Luxe" alt="Featured Jewelry">
+    <div class="banner-text">Featured Designer: Sophia Luxe</div>
+  </div>
+
+  <div class="section-title">Latest Jewelry</div>
+
+  <div class="product-list">
+    <div class="product-card">
+      <img src="https://via.placeholder.com/150x150?text=Necklace" alt="Necklace">
+      <div class="product-name">Gold Necklace</div>
+      <div class="product-price">₹2,499</div>
+    </div>
+    <div class="product-card">
+      <img src="https://via.placeholder.com/150x150?text=Earrings" alt="Earrings">
+      <div class="product-name">Pearl Earrings</div>
+      <div class="product-price">₹1,299</div>
+    </div>
+    <div class="product-card">
+      <img src="https://via.placeholder.com/150x150?text=Bracelet" alt="Bracelet">
+      <div class="product-name">Silver Bracelet</div>
+      <div class="product-price">₹999</div>
+    </div>
+    <div class="product-card">
+      <img src="https://via.placeholder.com/150x150?text=Ring" alt="Ring">
+      <div class="product-name">Diamond Ring</div>
+      <div class="product-price">₹3,999</div>
+    </div>
+  </div>
+
+</body>
+</html>
