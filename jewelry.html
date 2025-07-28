@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Gleam – Jewelry Collection</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f8f4f0;
+    }
+
+    header {
+      background-color: #fff;
+      padding: 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    }
+
+    header h1 {
+      font-size: 22px;
+      margin: 0;
+      color: #4d4d4d;
+    }
+
+    .search-bar {
+      margin: 16px;
+    }
+
+    .search-bar input {
+      width: 100%;
+      padding: 12px;
+      border-radius: 8px;
+      border: none;
+      background-color: #f0eae4;
+      font-size: 16px;
+    }
+
+    .banner {
+      margin: 16px;
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    .banner img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    .banner-text {
+      position: absolute;
+      margin-top: -60px;
+      color: white;
+      font-weight: bold;
+      font-size: 20px;
+      padding-left: 16px;
+      text-shadow: 0 0 5px rgba(0,0,0,0.5);
+    }
+
+    .section-title {
+      margin: 24px 16px 8px;
+      font-size: 18px;
+      font-weight: 600;
+      color: #333;
+    }
+
+    .product-list {
+      display: flex;
+      gap: 16px;
+      padding: 0 16px 32px;
+      overflow-x: auto;
+    }
+
+    .product-card {
+      flex: 0 0 auto;
+      background: #fff;
+      border-radius: 12px;
+      padding: 10px;
+      width: 150px;
+      box-shadow: 0 1px 5px rgba(0,0,0,0.1);
+      text-align: center;
+    }
+
+    .product-card img {
+      width: 100%;
+      height: 120px;
+      object-fit: cover;
+      border-radius: 10px;
+    }
+
+    .product-name {
+      font-size: 14px;
+      margin-top: 8px;
+      color: #444;
+    }
+
+    .product-price {
+      font-weight: bold;
+      color: #b67f4c;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>Gleam</h1>
+  </header>
+
+  <div class="search-bar">
+    <input type="text" placeholder="Search for jewelry...">
+  </div>
+
+  <div class="banner">
+    <img src="https://via.placeholder.com/800x400?text=Featured+Jeweler+Sophia+Luxe" alt="Featured Jewelry">
+    <div class="banner-text">Featured Designer: Sophia Luxe</div>
+  </div>
+
+  <div class="section-title">Latest Jewelry</div>
+
+  <div class="product-list">
+    <div class="product-card">
+      <img src="https://via.placeholder.com/150x150?text=Necklace" alt="Necklace">
+      <div class="product-name">Gold Necklace</div>
+      <div class="product-price">₹2,499</div>
+    </div>
+    <div class="product-card">
+      <img src="https://via.placeholder.com/150x150?text=Earrings" alt="Earrings">
+      <div class="product-name">Pearl Earrings</div>
+      <div class="product-price">₹1,299</div>
+    </div>
+    <div class="product-card">
+      <img src="https://via.placeholder.com/150x150?text=Bracelet" alt="Bracelet">
+      <div class="product-name">Silver Bracelet</div>
+      <div class="product-price">₹999</div>
+    </div>
+    <div class="product-card">
+      <img src="https://via.placeholder.com/150x150?text=Ring" alt="Ring">
+      <div class="product-name">Diamond Ring</div>
+      <div class="product-price">₹3,999</div>
+    </div>
+  </div>
+
+</body>
+</html>
