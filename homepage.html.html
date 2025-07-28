@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Artisan Connect</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #fafafa;
+      color: #333;
+    }
+
+    /* Navbar */
+    nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background-color: #fff;
+      padding: 20px 40px;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .logo {
+      font-size: 1.8em;
+      font-weight: 700;
+      color: #2c7a7b;
+    }
+
+    .nav-links a {
+      margin-left: 25px;
+      text-decoration: none;
+      color: #2c7a7b;
+      font-weight: 500;
+      transition: color 0.3s;
+    }
+
+    .nav-links a:hover {
+      color: #38b2ac;
+    }
+
+    /* Hero Section */
+    .hero {
+      background: url('file:///C:/Users/WELCOME/Downloads/hero-artisan.jpeg') no-repeat center center/cover;
+      height: 70vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      color: #fff;
+      text-align: center;
+    }
+
+    .hero::after {
+      content: "";
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0,0,0,0.4);
+    }
+
+    .hero-content {
+      position: relative;
+      max-width: 600px;
+      z-index: 1;
+    }
+
+    .hero-content h1 {
+      font-size: 3em;
+      margin-bottom: 10px;
+    }
+
+    .hero-content p {
+      font-size: 1.2em;
+    }
+
+    /* Category Section */
+    .categories {
+      max-width: 1100px;
+      margin: 60px auto;
+      padding: 0 20px;
+    }
+
+    .categories h2 {
+      text-align: center;
+      font-size: 26px;
+      margin-bottom: 30px;
+      font-weight: 700;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 20px;
+    }
+
+    .category-card {
+      text-align: center;
+      text-decoration: none;
+      color: #333;
+      background: #fff;
+      padding: 16px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      transition: transform 0.2s;
+      display: block;
+    }
+
+    .category-card:hover {
+      transform: translateY(-5px);
+    }
+
+    .category-card img {
+      width: 100%;
+      height: 160px;
+      object-fit: cover;
+      border-radius: 10px;
+      margin-bottom: 10px;
+    }
+
+    .category-title {
+      font-weight: bold;
+      font-size: 18px;
+      margin: 8px 0 4px;
+    }
+
+    .category-description {
+      font-size: 14px;
+      color: #555;
+    }
+
+    @media (max-width: 600px) {
+      .hero-content h1 {
+        font-size: 2em;
+      }
+
+      nav {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .nav-links {
+        margin-top: 10px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navbar -->
+  <nav>
+    <div class="logo">Artisan Connect</div>
+    <div class="nav-links">
+      <a href="#">Home</a>
+      <a href="#">Categories</a>
+      <a href="#">About</a>
+      <a href="#">Contact</a>
+      <a href="login.html" style="background:#2c7a7b; color:#fff; padding: 6px 12px; border-radius: 5px;">Login</a>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="hero-content">
+      <h1>Support Local Artisans</h1>
+      <p>Discover unique, handcrafted items from talented artisans in your community.</p>
+    </div>
+  </section>
+
+  <!-- Categories Section -->
+  <section class="categories">
+    <h2>Explore Categories</h2>
+    <div class="grid">
+      <a href="homedecor.html" class="category-card">
+        <img src="https://images.unsplash.com/photo-1523413651479-597eb2da0ad6" alt="Home Decor">
+        <p class="category-title">Home Decor</p>
+        <p class="category-description">Find unique pieces to adorn your home.</p>
+      </a>
+
+      <a href="jewelry.html" class="category-card">
+        <img src="file:///C:/Users/WELCOME/Videos/jew.png" alt="Jewelry">
+        <p class="category-title">Jewelry</p>
+        <p class="category-description">Discover handcrafted jewelry from local designers.</p>
+      </a>
+
+      <a href="textiles.html" class="category-card">
+        <img src="file:///C:/Users/WELCOME/Videos/txtx.png" alt="Textiles">
+        <p class="category-title">Textiles</p>
+        <p class="category-description">Explore a range of textiles, from clothing to home goods.</p>
+      </a>
+
+      <a href="#" class="category-card">
+        <img src="file:///C:/Users/WELCOME/Videos/painting.png" alt="Paintings">
+        <p class="category-title">Paintings</p>
+        <p class="category-description">Browse original paintings from emerging artists.</p>
+      </a>
+
+      <a href="#" class="category-card">
+        <img src="file:///C:/Users/WELCOME/Videos/potrry.png" alt="Pottery">
+        <p class="category-title">Pottery</p>
+        <p class="category-description">Discover unique pottery and ceramics.</p>
+      </a>
+    </div>
+  </section>
+
+</body>
+</html>
