@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>My Orders - Artisans Bazaar</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      margin: 0;
+      background-color: #f7f7f7;
+    }
+    h1 {
+      text-align: center;
+      color: #2c7a7b;
+      margin-top: 30px;
+    }
+    .orders-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+      padding: 40px;
+    }
+    .order-card {
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+      padding: 20px;
+      transition: transform 0.2s;
+    }
+    .order-card:hover {
+      transform: translateY(-3px);
+    }
+    .order-card img {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+      border-radius: 8px;
+    }
+    .order-details {
+      margin-top: 15px;
+    }
+    .order-details h3 {
+      margin: 0;
+      color: #2c7a7b;
+    }
+    .order-details p {
+      margin: 5px 0;
+      font-size: 0.95em;
+      color: #555;
+    }
+    .status {
+      display: inline-block;
+      padding: 6px 10px;
+      border-radius: 6px;
+      font-size: 0.85em;
+      font-weight: bold;
+    }
+    .status.pending { background: #fff3cd; color: #856404; }
+    .status.shipped { background: #cce5ff; color: #004085; }
+    .status.delivered { background: #d4edda; color: #155724; }
+    .status.cancelled { background: #f8d7da; color: #721c24; }
+  </style>
+</head>
+<body>
+
+  <h1>My Orders</h1>
+
+  <div class="orders-container" id="ordersContainer">
+    <p style="grid-column: 1/-1; text-align:center;">Loading your orders...</p>
+  </div>
+
+  <script>
+document.addEventListener('DOMContentLoaded', () => {
+  // Get logged-in user from localStorage
+  const user = JSON.parse(localStorage.getItem('user'));
+
+  // Redirect to login if no user found
+  if (!user) {
+    alert('Please log in first!');
+    window.location.href = 'login.html';
+    return;
+  }
+
+  // Fetch orders for this user
+  fetch(`http://localhost:3000/api/myorders/${user.email}`)
+    .then(res => res.json())
+    .then(data => {
+      const container = document.getElementById('ordersContainer');
+      container.innerHTML = '';
+
+      if (data.length === 0) {
+        container.innerHTML = '<p style="grid-column: 1/-1; text-align:center;">No orders found.</p>';
+        return;
+      }
+
+      // Loop through orders and create cards
+      data.forEach(order => {
+        const statusClass = order.status ? order.status.toLowerCase() : 'pending';
+
+        const card = document.createElement('div');
+        card.className = 'order-card';
+        card.innerHTML = `
+          <img src="http://localhost:3000${order.productImage}" alt="${order.productName}">
+          <div class="order-details">
+            <h3>${order.productName}</h3>
+            <p><strong>Quantity:</strong> ${order.quantity}</p>
+            <p><strong>Total Price:</strong> ₹${order.totalPrice}</p>
+            <p><strong>Payment:</strong> ${order.paymentMethod}</p>
+            <p><strong>Order Date:</strong> ${new Date(order.orderDate).toLocaleString()}</p>
+            <p><span class="status ${statusClass}">${order.status || 'Pending'}</span></p>
+          </div>
+        `;
+        container.appendChild(card);
+      });
+    })
+    .catch(err => {
+      console.error(err);
+      document.getElementById('ordersContainer').innerHTML =
+        '<p style="grid-column: 1/-1; text-align:center;">Error loading orders.</p>';
+    });
+});
+</script>
+
+</body>
+</html>

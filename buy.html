@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Buy Product - Artisans Bazaar</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #f8f8f8;
+            margin: 0;
+            padding: 0;
+            color: #333;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 20px;
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            display: flex;
+            gap: 40px;
+        }
+        .product-image {
+            flex: 1;
+        }
+        .product-image img {
+            width: 100%;
+            max-height: 500px;
+            object-fit: contain;
+            border-radius: 10px;
+        }
+        .product-details {
+            flex: 2;
+        }
+        .product-details h1 {
+            font-size: 2em;
+            margin-bottom: 10px;
+            color: #2c7a7b;
+        }
+        .price {
+            font-size: 1.5em;
+            color: #e53e3e;
+            margin-bottom: 20px;
+        }
+        .description {
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        select, input[type="number"], input[type="text"] {
+            padding: 10px;
+            font-size: 1em;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            width: 100%;
+            max-width: 300px;
+        }
+        .buy-btn, .cart-btn {
+            padding: 12px 24px;
+            font-size: 1em;
+            font-weight: 600;
+            color: white;
+            background-color: #3182ce;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            margin-right: 10px;
+            transition: background-color 0.3s;
+        }
+        .buy-btn:hover {
+            background-color: #2b6cb0;
+        }
+        .cart-btn:hover {
+            background-color: #319795;
+        }
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Product Image -->
+        <div class="product-image">
+            <img id="product-img" src="" alt="Product Image" />
+        </div>
+        <!-- Product Details -->
+        <div class="product-details">
+            <h1 id="product-name">Loading...</h1>
+            <div class="price" id="product-price">₹0</div>
+            <div class="description" id="product-description">This beautiful handcrafted item brings a rustic touch to your home decor. Made by local artisans with natural materials and love.</div>
+            <!-- Quantity -->
+            <div class="form-group">
+                <label for="quantity">Quantity:</label><br />
+                <input type="number" id="quantity" name="quantity" value="1" min="1" max="10" />
+            </div>
+            <!-- Total Price Display -->
+            <div class="form-group">
+                <p><strong>Total Price:</strong> <span id="total-price">₹0</span></p>
+            </div>
+            <!-- Delivery Estimate -->
+            <p><strong>Delivery by:</strong> <span id="delivery-date">September 12, 2025</span></p>
+            <!-- Payment Method (Mock UI) -->
+            <div class="form-group">
+                <label for="payment">Payment Method:</label><br />
+                <select id="payment">
+                    <option value="cod">Cash on Delivery</option>
+                    <option value="card">Credit/Debit Card</option>
+                    <option value="upi">UPI</option>
+                </select>
+            </div>
+            <!-- Buttons -->
+            <button class="buy-btn" onclick="buyNow()">Buy Now</button>
+            <button class="cart-btn" onclick="addToCart()">Add to Cart</button>
+        </div>
+    </div>
+
+<script>
+  
+  function getQueryParam(param) {
+    const urlParams = new URLSearchParams(window.location.search);
+    return decodeURIComponent(urlParams.get(param) || "");
+  }
+
+  const productId = getQueryParam("id");
+  let productData = null;
+
+  // ✅ Load product details dynamically
+  async function loadProduct() {
+    try {
+      const res = await fetch(`http://localhost:3000/products/${productId}`);
+      if (!res.ok) throw new Error("Failed to fetch product");
+
+      const product = await res.json();
+      productData = product;
+
+      document.getElementById("product-name").innerText = product.productName;
+      document.getElementById("product-price").innerText = `₹${parseFloat(product.productPrice).toFixed(2)}`;
+      document.getElementById("product-description").innerText = product.productDescription;
+      document.getElementById("product-img").src = `http://localhost:3000${product.productImage}`;
+
+      updateTotal();
+    } catch (err) {
+      document.getElementById("product-name").innerText = "❌ Failed to load product details";
+      console.error(err);
+    }
+  }
+// --- Set delivery date within 4 days from today ---
+function setDeliveryDate() {
+  const today = new Date();
+  const deliveryDate = new Date(today);
+  deliveryDate.setDate(today.getDate() + 4); // Add 4 days
+  const formatted = deliveryDate.toLocaleDateString("en-IN", {
+    year: "numeric",
+    month: "long",
+    day: "numeric"
+  });
+  document.getElementById("delivery-date").textContent = formatted;
+}
+setDeliveryDate();
+
+  // ✅ Update total dynamically
+  function updateTotal() {
+    if (!productData) return;
+    const quantity = parseInt(document.getElementById("quantity").value);
+    const total = quantity * parseFloat(productData.productPrice);
+    document.getElementById("total-price").innerText = `₹${total.toFixed(2)}`;
+  }
+
+  document.getElementById("quantity").addEventListener("input", updateTotal);
+
+  // ✅ Buy Now flow (fully working)
+  async function buyNow() {
+    const userEmail = localStorage.getItem("userEmail");
+    if (!userEmail) {
+      alert("⚠️ Please log in before placing an order.");
+      window.location.href = "login.html";
+      return;
+    }
+
+    if (!productData || !productData.id) {
+      alert("❌ Product details not loaded properly.");
+      return;
+    }
+
+    const quantity = parseInt(document.getElementById("quantity").value);
+    const totalPrice = quantity * parseFloat(productData.productPrice);
+    const paymentMethod = document.getElementById("payment").value;
+    const address = prompt("Enter your delivery address:");
+    const pincode = prompt("Enter your pincode:");
+
+    if (!address || !pincode) {
+      alert("⚠️ Address and pincode are required!");
+      return;
+    }
+
+    const order = {
+      userEmail,
+      productId: productData.id,
+      quantity,
+      totalPrice,
+      paymentMethod,
+      address,
+      pincode
+    };
+
+    try {
+      const res = await fetch("http://localhost:3000/orders", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(order)
+      });
+
+      const data = await res.json();
+
+      if (data.success) {
+        alert("✅ Order placed successfully!");
+        window.location.href = "thankyou.html";
+      } else {
+        alert("❌ Failed to place order. Please try again.");
+        console.error("Server response:", data);
+      }
+    } catch (err) {
+      console.error("Error saving order:", err);
+      alert("❌ Error placing order. Please check console.");
+    }
+  }
+
+  // ✅ Load product on page load
+  window.onload = loadProduct;
+
+
+
+</script>
+
+
+        
+</body>
+</html>
+

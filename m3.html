@@ -1,0 +1,732 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Artisans Bazaar - Online Marketplace</title>
+  <style>
+    /* Reset & Base Styles */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #fafafa;
+      color: #333;
+    }
+
+    /* Navbar */
+    nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background-color: #fff;
+      padding: 15px 30px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+
+    .logo {
+      font-size: 1.8em;
+      font-weight: 700;
+      color: #2c7a7b;
+    }
+
+    /* Nav Links & Dropdowns */
+    .nav-links {
+      display: flex;
+      align-items: center;
+    }
+
+    .nav-link {
+      margin-left: 20px;
+      position: relative;
+      cursor: pointer;
+      font-weight: 500;
+      transition: color 0.3s;
+    }
+
+    .nav-link:hover {
+      color: #38b2ac;
+    }
+
+    /* Dropdown Menu */
+    .dropdown {
+      position: absolute;
+      top: 100%;
+      right: 0;
+      background-color: #fff;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+      display: none;
+      flex-direction: column;
+      min-width: 150px;
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    .dropdown a {
+      padding: 10px 15px;
+      text-decoration: none;
+      color: #333;
+      transition: background 0.2s;
+    }
+
+    .dropdown a:hover {
+      background-color: #f0f0f0;
+    }
+
+    .nav-link:hover .dropdown {
+      display: flex;
+    }
+
+    /* Profile Info */
+    #userProfile {
+      display: none;
+      align-items: center;
+      margin-left: 15px;
+    }
+
+    #userProfile span {
+      margin-right: 10px;
+      font-weight: 500;
+    }
+
+    /* Hero Section */
+    .hero {
+      background: url('C:\\Users\\HP\\Downloads\\home.jpeg')no-repeat center center/cover;
+      height: 70vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      color: #fff;
+    }
+
+    .hero::after {
+      content: "";
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0,0,0,0.4);
+    }
+
+    .hero-content {
+      position: relative;
+      text-align: center;
+      max-width: 800px;
+      padding: 20px;
+    }
+
+    .hero-content h1 {
+      font-size: 3em;
+      margin-bottom: 15px;
+    }
+
+    .hero-content p {
+      font-size: 1.2em;
+    }
+
+    /* Search & Filters */
+    .search-section {
+      padding: 40px 20px;
+      text-align: center;
+      background-color: #fff;
+    }
+
+    .search-section h2 {
+      margin-bottom: 10px;
+      font-size: 1.8em;
+    }
+
+    #searchInput {
+      width: 50%;
+      max-width: 500px;
+      padding: 15px 20px;
+      font-size: 1em;
+      border: 2px solid #ccc;
+      border-radius: 8px;
+      transition: border-color 0.3s;
+    }
+
+    #searchInput:focus {
+      border-color: #38b2ac;
+      outline: none;
+    }
+
+    /* Products Grid */
+    .products {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 30px;
+      padding: 40px 20px;
+    }
+
+    /* Product Card */
+    .product-card {
+      background-color: #fff;
+      border-radius: 10px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      transition: transform 0.2s;
+    }
+
+    .product-card:hover {
+      transform: translateY(-5px);
+    }
+
+    .product-image {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+    }
+
+    .product-details {
+      padding: 15px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .product-title {
+      font-size: 1.2em;
+      margin-bottom: 10px;
+      color: #2c7a7b;
+    }
+
+    .product-price {
+      font-size: 1.1em;
+      font-weight: 600;
+      margin-bottom: 15px;
+    }
+
+    .buttons {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    button {
+      flex: 1;
+      padding: 10px 15px;
+      border: none;
+      border-radius: 6px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    .add-to-cart {
+      background-color: #2c7a7b;
+      color: #fff;
+    }
+
+    .add-to-cart:hover {
+      background-color: #38b2ac;
+    }
+
+    .wishlist {
+      background-color: #ddd;
+      color: #333;
+    }
+
+    .wishlist:hover {
+      background-color: #ccc;
+    }
+
+    /* Footer (Optional) */
+    footer {
+      background-color: #fff;
+      padding: 20px 40px;
+      text-align: center;
+      box-shadow: 0 -2px 8px rgba(0,0,0,0.1);
+      margin-top: 40px;
+    }
+
+    /* Modal Styles */
+    .modal {
+      display: none; 
+      position: fixed; 
+      z-index: 2000; 
+      left: 0;
+      top: 0;
+      width: 100%; 
+      height: 100%; 
+      overflow: auto; 
+      background-color: rgba(0,0,0,0.5);
+      justify-content: center;
+      align-items: center;
+    }
+
+    .modal-content {
+      background-color: #fff;
+      padding: 30px;
+      border-radius: 10px;
+      max-width: 400px;
+      width: 90%;
+      position: relative;
+    }
+
+    .close-btn {
+      position: absolute;
+      top: 15px;
+      right: 20px;
+      font-size: 1.5em;
+      cursor: pointer;
+      color: #555;
+    }
+
+    /* Responsive adjustments */
+    @media(max-width: 768px){
+      #searchInput {
+        width: 80%;
+      }
+      .hero-content h1 {
+        font-size: 2em;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Navbar -->
+<nav>
+  <div style="display:flex; align-items:center;">
+    <a href="#" id="loginBtn" style="
+      padding:8px 16px; background-color:#2c7a7b; color:#fff; border-radius:6px; text-decoration:none; font-weight:500; margin-right:15px; cursor:pointer;
+    ">Login</a>
+    <div class="logo">Artisans Bazaar</div>
+  </div>
+  <div class="nav-links">
+    <div class="nav-link">Home</div>
+    <div class="nav-link" id="categoryDropdown">
+      Categories
+      <div class="dropdown">
+        <a href="#">Home Decor</a>
+        <a href="#">Jewelry</a>
+        <a href="#">Textiles</a>
+        <a href="#">Paintings</a>
+        <a href="#">Pottery</a>
+      </div>
+    </div>
+    <div class="nav-link">About</div>
+    <div class="nav-link">Contact</div>
+    <!-- Profile & User Info -->
+    <div id="userProfile">
+      <span id="userName"></span>
+      <button id="logoutBtn" style="
+        padding:5px 10px; border:none; background-color:#e53e3e; color:#fff; border-radius:4px; cursor:pointer; font-size:0.9em;
+      ">Logout</button>
+    </div>
+    <!-- Cart & Wishlist icons -->
+    <div class="nav-link" id="cartContainer" style="margin-left:15px; position:relative; cursor:pointer;">
+      🛒 <span id="cartCount" style="font-size:0.9em; background:#e53e3e; color:#fff; padding:2px 6px; border-radius:50%; position:absolute; top:-8px; right:-8px;">0</span>
+    </div>
+    <div class="nav-link" id="wishlistContainer" style="margin-left:15px; position:relative; cursor:pointer;">
+      ❤️ <span id="wishlistCount" style="font-size:0.9em; background:#e53e3e; color:#fff; padding:2px 6px; border-radius:50%; position:absolute; top:-8px; right:-8px;">0</span>
+    </div>
+  </div>
+</nav>
+
+<!-- Hero Section -->
+<section class="hero">
+  <div class="hero-content">
+    <h1>Support Local Artisans</h1>
+    <p>Explore handcrafted treasures and cultural wonders from nearby creators.</p>
+  </div>
+</section>
+
+<!-- Search Bar -->
+<section class="search-section">
+  <h2>Search Categories</h2>
+  <input type="text" id="searchInput" placeholder="e.g. Jewelry, Textiles, Decor..." onkeyup="filterCategories()" />
+</section>
+
+<!-- Products Section -->
+<section class="products" id="productList">
+  <!-- Sample products -->
+  <div class="product-card" data-category="Home Decor" data-name="Handmade Vase" data-price="25" data-image="https://images.unsplash.com/photo-1590079793820-66f48b4d0d8b?ixlib=rb-4.0.4&auto=format&fit=crop&w=800&q=80">
+    <img src="https://images.unsplash.com/photo-1590079793820-66f48b4d0d8b?ixlib=rb-4.0.4&auto=format&fit=crop&w=800&q=80" alt="Handmade Vase" class="product-image" />
+    <div class="product-details">
+      <div>
+        <div class="product-title">Handmade Vase</div>
+        <div class="product-price">$25</div>
+      </div>
+      <div class="buttons">
+        <button class="add-to-cart" onclick="addToCart('Handmade Vase', 25)">Add to Cart</button>
+        <button class="wishlist" onclick="addToWishlist('Handmade Vase')">♡</button>
+      </div>
+    </div>
+  </div>
+  <div class="product-card" data-category="Jewelry" data-name="Silver Necklace" data-price="45" data-image="https://images.unsplash.com/photo-1617645819925-99b8f1a7d94f?ixlib=rb-4.0.4&auto=format&fit=crop&w=800&q=80">
+    <img src="https://images.unsplash.com/photo-1617645819925-99b8f1a7d94f?ixlib=rb-4.0.4&auto=format&fit=crop&w=800&q=80" alt="Silver Necklace" class="product-image" />
+    <div class="product-details">
+      <div>
+        <div class="product-title">Silver Necklace</div>
+        <div class="product-price">$45</div>
+      </div>
+      <div class="buttons">
+        <button class="add-to-cart" onclick="addToCart('Silver Necklace', 45)">Add to Cart</button>
+        <button class="wishlist" onclick="addToWishlist('Silver Necklace')">♡</button>
+      </div>
+    </div>
+  </div>
+  <div class="product-card" data-category="Textiles" data-name="Bohemian Scarf" data-price="18" data-image="https://images.unsplash.com/photo-1622622184262-4f7e7a2b0b2e?ixlib=rb-4.0.4&auto=format&fit=crop&w=800&q=80">
+    <img src="https://images.unsplash.com/photo-1622622184262-4f7e7a2b0b2e?ixlib=rb-4.0.4&auto=format&fit=crop&w=800&q=80" alt="Bohemian Scarf" class="product-image" />
+    <div class="product-details">
+      <div>
+        <div class="product-title">Bohemian Scarf</div>
+        <div class="product-price">$18</div>
+      </div>
+      <div class="buttons">
+        <button class="add-to-cart" onclick="addToCart('Bohemian Scarf', 18)">Add to Cart</button>
+        <button class="wishlist" onclick="addToWishlist('Bohemian Scarf')">♡</button>
+      </div>
+    </div>
+  </div>
+  <!-- More products can be added similarly -->
+</section>
+
+<!-- Footer -->
+<footer>
+  <p>© 2024 Artisans Bazaar. All rights reserved.</p>
+</footer>
+
+<!-- Login Modal with Create Account -->
+<div id="loginModal" class="modal">
+  <div class="modal-content">
+    <span class="close-btn" id="closeLogin">×</span>
+
+    <!-- Login Form -->
+    <div id="loginFormContainer">
+      <h2>Login</h2>
+      <input type="text" id="loginUsername" placeholder="Username" style="width:100%; padding:10px; margin-top:15px; border-radius:5px; border:1px solid #ccc;">
+      <input type="password" id="loginPassword" placeholder="Password" style="width:100%; padding:10px; margin-top:15px; border-radius:5px; border:1px solid #ccc;">
+      <button style="width:100%; padding:12px; margin-top:20px; border:none; background-color:#2c7a7b; color:#fff; border-radius:6px; font-size:1em; cursor:pointer;" onclick="loginUser()">Login</button>
+      <p style="margin-top:15px; text-align:center;">Don't have an account? <a href="#" id="showRegister" style="color:#2c7a7b; text-decoration:none;">Create one</a></p>
+    </div>
+
+    <!-- Registration Form with Email -->
+    <div id="registerFormContainer" style="display:none;">
+      <h2>Create Account</h2>
+      <input type="text" id="registerUsername" placeholder="Choose a Username" style="width:100%; padding:10px; margin-top:15px; border-radius:5px; border:1px solid #ccc;">
+      <input type="email" id="registerEmail" placeholder="Your Email" style="width:100%; padding:10px; margin-top:15px; border-radius:5px; border:1px solid #ccc;">
+      <input type="password" id="registerPassword" placeholder="Choose a Password" style="width:100%; padding:10px; margin-top:15px; border-radius:5px; border:1px solid #ccc;">
+      <button style="width:100%; padding:12px; margin-top:20px; border:none; background-color:#2c7a7b; color:#fff; border-radius:6px; font-size:1em; cursor:pointer;" onclick="registerUser()">Create Account</button>
+      <p style="margin-top:15px; text-align:center;">Already have an account? <a href="#" id="showLogin" style="color:#2c7a7b; text-decoration:none;">Login here</a></p>
+    </div>
+  </div>
+</div>
+
+<!-- Profile Modal -->
+<div id="profileModal" class="modal">
+  <div class="modal-content">
+    <span class="close-btn" id="closeProfile">×</span>
+    <h2>User Profile</h2>
+    <div id="profileDetails" style="margin-top:15px;">
+      <p><strong>Name:</strong> <span id="profileName"></span></p>
+      <p><strong>Orders:</strong></p>
+      <ul id="ordersList"></ul>
+      <p><strong>Wishlist:</strong></p>
+      <ul id="wishlistItems"></ul>
+    </div>
+  </div>
+</div>
+
+<!-- Cart Modal -->
+<div id="cartModal" class="modal">
+  <div class="modal-content" style="max-height:80vh; overflow-y:auto;">
+    <span class="close-btn" id="closeCart">×</span>
+    <h2>Your Cart</h2>
+    <div id="cartItems"></div>
+    <h3 style="margin-top:20px;">Total: $<span id="cartTotal">0</span></h3>
+    <button style="width:100%; padding:12px; background-color:#2c7a7b; color:#fff; border:none; border-radius:6px; font-size:1em; cursor:pointer; margin-top:15px;" onclick="checkout()">Checkout</button>
+  </div>
+</div>
+
+<!-- Wishlist Modal -->
+<div id="wishlistModal" class="modal">
+  <div class="modal-content" style="max-height:80vh; overflow-y:auto;">
+    <span class="close-btn" id="closeWishlist">×</span>
+    <h2>Your Wishlist</h2>
+    <div id="wishlistItemsModal"></div>
+  </div>
+</div>
+
+<script>
+  // User data setup
+  let currentUser = null;
+  let cart = [];
+  let wishlist = [];
+  let orders = [];
+
+  let users = JSON.parse(localStorage.getItem('users')) || {};
+
+  // DOM elements
+  const loginModal = document.getElementById('loginModal');
+  const profileModal = document.getElementById('profileModal');
+  const cartModal = document.getElementById('cartModal');
+  const wishlistModal = document.getElementById('wishlistModal');
+
+  const userProfileDiv = document.getElementById('userProfile');
+  const userNameSpan = document.getElementById('userName');
+
+  // Show registration form
+document.getElementById('showRegister').addEventListener('click', () => {
+  document.getElementById('loginFormContainer').style.display='none';
+  document.getElementById('registerFormContainer').style.display='block';
+});
+// Show login form
+document.getElementById('showLogin').addEventListener('click', () => {
+  document.getElementById('registerFormContainer').style.display='none';
+  document.getElementById('loginFormContainer').style.display='block';
+});
+
+// Open login modal
+document.getElementById('loginBtn').addEventListener('click', () => {
+  loginModal.style.display='flex';
+});
+// Close modal buttons
+document.getElementById('closeLogin').onclick = () => { loginModal.style.display='none'; }
+document.getElementById('closeProfile').onclick = () => { profileModal.style.display='none'; }
+document.getElementById('closeCart').onclick = () => { cartModal.style.display='none'; }
+document.getElementById('closeWishlist').onclick = () => { wishlistModal.style.display='none'; }
+
+// Window click to close modals
+window.onclick = function(event) {
+  if (event.target == loginModal) loginModal.style.display='none';
+  if (event.target == profileModal) profileModal.style.display='none';
+  if (event.target == cartModal) cartModal.style.display='none';
+  if (event.target == wishlistModal) wishlistModal.style.display='none';
+}
+
+// Login function
+function loginUser() {
+  const username = document.getElementById('loginUsername').value.trim();
+  const password = document.getElementById('loginPassword').value.trim();
+  if (username && password) {
+    if (users[username] && users[username].password === password) {
+      currentUser = { name: username };
+      document.getElementById('userName').innerText = username;
+      userProfileDiv.style.display='flex';
+      document.getElementById('loginBtn').style.display='none';
+      loginModal.style.display='none';
+      loadUserData();
+    } else {
+      alert('Invalid username or password.');
+    }
+  } else {
+    alert('Please enter username and password.');
+  }
+}
+
+// Register function
+function registerUser() {
+  const username = document.getElementById('registerUsername').value.trim();
+  const email = document.getElementById('registerEmail').value.trim();
+  const password = document.getElementById('registerPassword').value.trim();
+
+  if (!username || !email || !password) {
+    alert('Please fill in all fields.');
+    return;
+  }
+
+  // Basic email validation
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!emailRegex.test(email)) {
+    alert('Please enter a valid email address.');
+    return;
+  }
+
+  if (users[username]) {
+    alert('Username already exists. Please choose another.');
+    return;
+  }
+
+  // Save user with email
+  users[username] = { password: password, email: email };
+  localStorage.setItem('users', JSON.stringify(users));
+  alert('Account created! Please log in.');
+  // Reset fields
+  document.getElementById('registerUsername').value = '';
+  document.getElementById('registerEmail').value = '';
+  document.getElementById('registerPassword').value = '';
+  // Switch to login
+  document.getElementById('showLogin').click();
+}
+
+// Logout
+function logoutUser() {
+  currentUser = null;
+  userProfileDiv.style.display='none';
+  document.getElementById('loginBtn').style.display='block';
+  cart = [];
+  wishlist = [];
+  updateCartCount();
+  updateWishlistCount();
+}
+
+// Load user data (simulate persistence)
+function loadUserData() {
+  cart = [];
+  wishlist = [];
+  orders = [];
+  updateCartCount();
+  updateWishlistCount();
+}
+
+// Add to cart
+function addToCart(name, price) {
+  if (!currentUser) {
+    alert('Please login to add items to cart.');
+    document.getElementById('loginBtn').click();
+    return;
+  }
+  cart.push({ name, price });
+  updateCartCount();
+  alert(`${name} added to cart.`);
+}
+// Add to wishlist
+function addToWishlist(name) {
+  if (!currentUser) {
+    alert('Please login to add items to wishlist.');
+    document.getElementById('loginBtn').click();
+    return;
+  }
+  if (!wishlist.includes(name)) {
+    wishlist.push(name);
+    updateWishlistCount();
+    alert(`${name} added to wishlist.`);
+  }
+}
+function updateCartCount() {
+  document.getElementById('cartCount').innerText = cart.length;
+}
+function updateWishlistCount() {
+  document.getElementById('wishlistCount').innerText = wishlist.length;
+}
+
+// Show cart
+document.getElementById('cartContainer').addEventListener('click', () => { showCart(); });
+function showCart() {
+  const container = document.getElementById('cartItems');
+  container.innerHTML = '';
+  let total = 0;
+  if (cart.length === 0) {
+    container.innerHTML = '<p>Your cart is empty.</p>';
+  } else {
+    cart.forEach((item, index) => {
+      total += item.price;
+      const div = document.createElement('div');
+      div.style.display='flex'; div.style.justifyContent='space-between'; div.style.alignItems='center'; div.style.marginBottom='10px';
+      div.innerHTML = `
+        <div>
+          <strong>${item.name}</strong><br>
+          $${item.price}
+        </div>
+        <button style="padding:5px 10px; border:none; background-color:#e53e3e; color:#fff; border-radius:4px; cursor:pointer;" onclick="removeFromCart(${index})">Remove</button>
+      `;
+      container.appendChild(div);
+    });
+  }
+  document.getElementById('cartTotal').innerText = total;
+  document.getElementById('cartModal').style.display='flex';
+}
+function removeFromCart(index) {
+  cart.splice(index,1);
+  showCart();
+  updateCartCount();
+}
+function checkout() {
+  if (cart.length === 0) {
+    alert('Your cart is empty.');
+    return;
+  }
+  if (!currentUser) {
+    alert('Please login to checkout.');
+    document.getElementById('loginBtn').click();
+    return;
+  }
+  // Save order
+  orders.push({ items: [...cart], date: new Date().toLocaleString() });
+  alert('Order placed successfully!');
+  cart = [];
+  updateCartCount();
+  showCart();
+}
+
+// Show wishlist
+document.getElementById('wishlistContainer').addEventListener('click', () => { showWishlist(); });
+function showWishlist() {
+  const container = document.getElementById('wishlistItemsModal');
+  container.innerHTML = '';
+  if (wishlist.length === 0) {
+    container.innerHTML = '<p>Your wishlist is empty.</p>';
+  } else {
+    wishlist.forEach((item) => {
+      const div = document.createElement('div');
+      div.style.display='flex'; div.style.justifyContent='space-between'; div.style.alignItems='center'; div.style.marginBottom='10px';
+      div.innerHTML = `
+        <div>${item}</div>
+        <button style="padding:5px 10px; border:none; background-color:#e53e3e; color:#fff; border-radius:4px; cursor:pointer;" onclick="removeFromWishlist('${item}')">Remove</button>
+      `;
+      container.appendChild(div);
+    });
+  }
+  document.getElementById('wishlistModal').style.display='flex';
+}
+function removeFromWishlist(itemName) {
+  wishlist = wishlist.filter(i => i !== itemName);
+  updateWishlistCount();
+  showWishlist();
+}
+
+// Load profile
+function loadProfile() {
+  if (currentUser) {
+    const userData = users[currentUser.name];
+    document.getElementById('profileName').innerText = currentUser.name + (userData.email ? ` (${userData.email})` : '');
+    // Load orders
+    const ordersList = document.getElementById('ordersList');
+    ordersList.innerHTML = '';
+    if (orders.length === 0) {
+      ordersList.innerHTML = '<li>No orders yet.</li>';
+    } else {
+      orders.forEach((order, index) => {
+        const li = document.createElement('li');
+        li.innerHTML = `
+          <strong>Order ${index +1} (${order.date}):</strong>
+          <ul>
+            ${order.items.map(i => `<li>${i.name} - $${i.price}</li>`).join('')}
+          </ul>
+        `;
+        ordersList.appendChild(li);
+      });
+    }
+    // Load wishlist
+    const wishlistUl = document.getElementById('wishlistItems');
+    wishlistUl.innerHTML = '';
+    if (wishlist.length === 0) {
+      wishlistUl.innerHTML = '<li>No items in wishlist.</li>';
+    } else {
+      wishlist.forEach(item => {
+        const li = document.createElement('li');
+        li.innerText = item;
+        wishlistUl.appendChild(li);
+      });
+    }
+    document.getElementById('profileModal').style.display='flex';
+  }
+}
+document.getElementById('userProfile').addEventListener('click', loadProfile);
+document.getElementById('logoutBtn').addEventListener('click', logoutUser);
+
+</script>
+</body>
+</html>

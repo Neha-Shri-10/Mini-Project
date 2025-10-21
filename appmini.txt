@@ -1,0 +1,78 @@
+const express = require('express');
+const app = express();
+const path = require('path');
+
+// Define the absolute path to your project folder
+const projectDir = 'C:\\Users\\HP\\OneDrive\\mini project sem5'; // Use double backslashes or path.join
+
+// Serve static files like CSS, JS, images from this folder
+app.use(express.static(projectDir));
+
+// Routes
+app.get('/home', (req, res) => {
+  res.sendFile(path.join(projectDir, 'home.html'));
+});
+app.get('/user', (req, res) => {
+  if (req.session.user) {
+    res.json(req.session.user);
+  } else {
+    res.status(401).json({ message: 'Not logged in' });
+  }
+});
+app.get('/signup', (req, res) => {
+  res.sendFile(path.join(projectDir, 'signup.html'));
+});
+
+app.get('/login', (req, res) => {
+  res.sendFile(path.join(projectDir, 'login.html'));
+});
+app.post('/logout', (req, res) => {
+  req.session.destroy((err) => {
+    if (err) {
+      return res.status(500).json({ message: 'Logout failed' });
+    }
+    res.clearCookie('connect.sid'); // if using express-session
+    res.json({ message: 'Logged out successfully' });
+  });
+});
+
+app.get('/changepass', (req, res) => {
+  res.sendFile(path.join(projectDir, 'changepass.html'));
+});
+
+
+app.get('/categories', (req, res) => {
+  res.json([
+    {
+      name: 'Home Decor',
+      description: 'Handmade items to bring warmth and charm to your living spaces.',
+      link: 'd2.html'
+    },
+    {
+      name: 'Bamboo Art',
+      description: 'Stunning accessories crafted with tradition and elegance.',
+      link: 'bamboo.html'
+    },
+    {
+      name: 'Embroidery',
+      description: 'Ethnic fabrics and contemporary fashion by skilled weavers.',
+      link: 'embroidary.html'
+    },
+    {
+      name: 'Paintings',
+      description: 'Art that tells a story from the heart of your region.',
+      link: 'painting.html'
+    },
+    {
+      name: 'Pottery',
+      description: 'Clay creations steeped in heritage and imagination.',
+      link: 'pottery.html'
+    }
+  ]);
+});
+
+
+// Start the server
+app.listen(3000, () => {
+  console.log('Server running on http://localhost:3000');
+});

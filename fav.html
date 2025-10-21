@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>My Favourites</title>
+  <style>
+    body { font-family: 'Segoe UI', sans-serif; margin: 40px; background: #fafafa; }
+    h2 { text-align: center; color: #2c7a7b; margin-bottom: 30px; }
+    .products { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; }
+    .card {
+      background: white; border-radius: 8px; padding: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      cursor: pointer; transition: transform 0.2s;
+    }
+    .card:hover { transform: translateY(-5px); }
+    .card h3 { margin: 10px 0; color: #2c7a7b; }
+  </style>
+</head>
+<body>
+  <h2>Your Favourite Items</h2>
+  <div class="products" id="favList"></div>
+
+<script>
+  // Sample data mapping IDs to pages and names
+  const productMap = {
+    lamp: { name: 'Handcrafted Lamp', page: 'decor.html#lamp' },
+    // Add other IDs here...
+  };
+
+  const favList = JSON.parse(localStorage.getItem('viewFavourites')) || [];
+  const container = document.getElementById('favList');
+
+  favList.forEach(id => {
+    const data = productMap[id];
+    if (!data) return;
+    const card = document.createElement('div');
+    card.className = 'card';
+    card.innerHTML = `<h3>${data.name}</h3>`;
+    card.onclick = () => window.location.href = data.page;
+    container.appendChild(card);
+  });
+</script>
+</body>
+</html>

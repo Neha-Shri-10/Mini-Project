@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Sell Your Artisan Product - Artisans Bazaar</title>
+  <link rel="icon" href="public/logo1.png" type="image/png" />
+  <style>
+    /* Reset & base */
+    * {
+      box-sizing: border-box;
+    }
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #fafafa;
+      color: #333;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    a {
+      color: #2c7a7b;
+      text-decoration: none;
+    }
+    a:hover {
+      color: #38b2ac;
+    }
+
+    /* Navbar */
+    nav {
+      background-color: #fff;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      padding: 15px 40px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .logo {
+      display: flex;
+      align-items: center;
+      font-weight: 700;
+      font-size: 1.6em;
+      color: #2c7a7b;
+    }
+    .logo img {
+      height: 50px;
+      width: 50px;
+      border-radius: 50%;
+      object-fit: cover;
+      margin-right: 10px;
+    }
+    .nav-links a {
+      margin-left: 25px;
+      font-weight: 500;
+      font-size: 1em;
+    }
+
+    /* Main container */
+    main {
+      flex-grow: 1;
+      max-width: 900px;
+      margin: 40px auto;
+      background: #fff;
+      padding: 40px 50px;
+      border-radius: 12px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+    }
+
+    h1 {
+      color: #2c7a7b;
+      margin-bottom: 10px;
+      font-size: 2.8em;
+      text-align: center;
+    }
+    p.subtitle {
+      text-align: center;
+      color: #555;
+      font-size: 1.1em;
+      margin-bottom: 40px;
+    }
+
+    form {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 25px 40px;
+    }
+
+    /* Full width fields */
+    form .full-width {
+      grid-column: 1 / -1;
+    }
+
+    label {
+      display: block;
+      font-weight: 600;
+      margin-bottom: 8px;
+      color: #2c7a7b;
+    }
+
+    input[type="text"],
+    input[type="email"],
+    input[type="number"],
+    input[type="tel"],
+    select,
+    textarea {
+      width: 100%;
+      padding: 12px 15px;
+      border: 2px solid #ccc;
+      border-radius: 8px;
+      font-size: 1em;
+      transition: border-color 0.3s;
+      resize: vertical;
+    }
+    input[type="text"]:focus,
+    input[type="email"]:focus,
+    input[type="number"]:focus,
+    input[type="tel"]:focus,
+    select:focus,
+    textarea:focus {
+      border-color: #38b2ac;
+      outline: none;
+    }
+
+    textarea {
+      min-height: 120px;
+    }
+
+    /* Image upload */
+    .image-upload {
+      border: 2px dashed #38b2ac;
+      border-radius: 10px;
+      padding: 20px;
+      text-align: center;
+      cursor: pointer;
+      color: #38b2ac;
+      font-weight: 600;
+      transition: background-color 0.3s, color 0.3s;
+    }
+    .image-upload:hover {
+      background-color: #38b2ac;
+      color: white;
+    }
+    .image-preview {
+      margin-top: 15px;
+      max-width: 100%;
+      max-height: 250px;
+      border-radius: 10px;
+      object-fit: contain;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+
+    /* Submit button */
+    button[type="submit"] {
+      grid-column: 1 / -1;
+      background-color: #2c7a7b;
+      color: white;
+      font-weight: 700;
+      font-size: 1.2em;
+      padding: 15px;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      box-shadow: 0 6px 15px rgba(44, 122, 123, 0.5);
+      transition: background-color 0.3s, transform 0.2s;
+    }
+    button[type="submit"]:hover {
+      background-color: #38b2ac;
+      transform: translateY(-3px);
+    }
+
+    /* Info box about admin approval */
+    .info-box {
+      grid-column: 1 / -1;
+      background-color: #e6fffa;
+      border-left: 6px solid #38b2ac;
+      padding: 15px 20px;
+      color: #2c7a7b;
+      font-weight: 600;
+      font-size: 1em;
+      border-radius: 8px;
+      margin-bottom: 30px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .info-box svg {
+      flex-shrink: 0;
+      width: 24px;
+      height: 24px;
+    }
+
+    /* Flex container for price and quantity */
+    .price-quantity-container {
+      display: flex;
+      gap: 40px;
+      justify-content: space-between;
+      align-items: flex-start;
+      grid-column: 1 / -1;
+    }
+
+    .price-quantity-container .field-group {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Optional: keep label margin consistent */
+    .price-quantity-container label {
+      margin-bottom: 8px;
+    }
+
+    /* Responsive */
+    @media (max-width: 720px) {
+      form {
+        grid-template-columns: 1fr;
+      }
+      main {
+        margin: 20px 15px;
+        padding: 30px 25px;
+      }
+      .price-quantity-container {
+        flex-direction: column;
+        gap: 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <div class="logo">
+      <img src="public/logo.png" alt="Artisans Bazaar Logo" />
+      <span>Artisans Bazaar</span>
+    </div>
+    <div class="nav-links">
+      <a href="home.html">Home</a>
+      <a href="about.html">About</a>
+      <a href="contact.html">Contact</a>
+    </div>
+  </nav>
+
+  <main>
+    <h1>Sell Your Artisan Product</h1>
+    <p class="subtitle">Fill in the details below to submit your product for review. Once approved by our admin, your product will be listed on Artisans Bazaar.</p>
+
+    <form id="sellerForm" novalidate>
+      <!-- Info box -->
+      <div class="info-box" role="alert" aria-live="polite">
+        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="10" stroke-linecap="round" stroke-linejoin="round"/><line x1="12" y1="8" x2="12" y2="12" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="16" r="1" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <span>Your submission will be reviewed by our admin before it appears on the marketplace.</span>
+      </div>
+
+      <!-- User Information -->
+      <h2 style="grid-column: 1 / -1; color: #2c7a7b; margin-bottom: 15px;">Your Information</h2>
+
+      <label for="sellerName">Full Name <sup style="color: #e53e3e;">*</sup></label>
+      <input type="text" id="sellerName" name="sellerName" placeholder="Your full name" required />
+
+      <label for="sellerEmail">Email Address <sup style="color: #e53e3e;">*</sup></label>
+      <input type="email" id="sellerEmail" name="sellerEmail" placeholder="you@example.com" required />
+
+      <label for="sellerPhone">Phone Number</label>
+      <input type="tel" id="sellerPhone" name="sellerPhone" placeholder="+1 234 567 8900" pattern="^\+?[0-9\s\-]{7,15}$" />
+
+      <!-- Product Information -->
+      <h2 style="grid-column: 1 / -1; color: #2c7a7b; margin-bottom: 15px; margin-top: 30px;">Product Details</h2>
+
+      <label for="productName">Product Name <sup style="color: #e53e3e;">*</sup></label>
+      <input type="text" id="productName" name="productName" placeholder="E.g. Handwoven Bamboo Basket" required />
+
+      <label for="productCategory">Category <sup style="color: #e53e3e;">*</sup></label>
+      <select id="productCategory" name="productCategory" required>
+        <option value="" disabled selected>Select a category</option>
+        <option value="Home Decor">Home Decor</option>
+        <option value="Bamboo Art">Bamboo Art</option>
+        <option value="Embroidery">Embroidery</option>
+        <option value="Paintings">Paintings</option>
+        <option value="Pottery">Pottery</option>
+        <option value="Jewelry">Jewelry</option>
+        <option value="Textiles">Textiles</option>
+        <option value="Other">Other</option>
+      </select>
+
+      <label for="productDescription" class="full-width">Product Description <sup style="color: #e53e3e;">*</sup></label>
+      <textarea id="productDescription" name="productDescription" placeholder="Describe your product, materials used, story, and any special features." required></textarea>
+
+      <!-- Price and Quantity side by side -->
+      <div class="price-quantity-container">
+        <div class="field-group">
+          <label for="productPrice">Price (USD) <sup style="color: #e53e3e;">*</sup></label>
+          <input type="number" id="productPrice" name="productPrice" placeholder="E.g. 49.99" min="0" step="0.01" required />
+        </div>
+        <div class="field-group">
+          <label for="productQuantity">Available Quantity <sup style="color: #e53e3e;">*</sup></label>
+          <input type="number" id="productQuantity" name="productQuantity" placeholder="E.g. 10" min="1" step="1" required />
+        </div>
+      </div>
+
+      <!-- Image Upload -->
+      <label for="productImage" class="full-width">Product Image <sup style="color: #e53e3e;">*</sup></label>
+      <div class="image-upload" tabindex="0" role="button" aria-label="Upload product image" onclick="document.getElementById('productImage').click()" onkeypress="if(event.key==='Enter' || event.key===' ') document.getElementById('productImage').click()">
+        Click or tap here to upload an image
+      </div>
+      <input type="file" id="productImage" name="productImage" accept="image/*" style="display:none" required />
+      <img id="imagePreview" alt="Product Image Preview" class="image-preview" style="display:none;" />
+
+      <!-- Submit -->
+      <button type="submit">Submit Product for Review</button>
+    </form>
+  </main>
+
+<script>
+  // Image preview
+  const productImageInput = document.getElementById('productImage');
+  const imagePreview = document.getElementById('imagePreview');
+
+  productImageInput.addEventListener('change', function () {
+    const file = this.files[0];
+    if (file && file.type.startsWith('image/')) {
+      const reader = new FileReader();
+      reader.onload = function (e) {
+        imagePreview.src = e.target.result;
+        imagePreview.style.display = 'block';
+      };
+      reader.readAsDataURL(file);
+    } else {
+      imagePreview.src = '';
+      imagePreview.style.display = 'none';
+    }
+  });
+
+  // Form validation and submission
+  const form = document.getElementById('sellerForm');
+
+  form.addEventListener('submit', async function (e) {
+    e.preventDefault();
+
+    if (!form.checkValidity()) {
+      form.reportValidity();
+      return;
+    }
+
+    const formData = new FormData(form);
+
+    try {
+      const response = await fetch('http://localhost:3000/submitProduct', {
+        method: 'POST',
+        body: formData
+      });
+
+      const result = await response.json();
+
+      if (response.ok) {
+        alert(result.message);
+        form.reset();
+        imagePreview.src = '';
+        imagePreview.style.display = 'none';
+      } else {
+        alert('Error: ' + (result.message || 'Something went wrong.'));
+      }
+    } catch (error) {
+      console.error('Error submitting product:', error);
+      alert('Server error. Please try again later.');
+    }
+  });
+
+  // Optional: Prefill user info if stored in localStorage (like your main page)
+  window.addEventListener('load', () => {
+    const user = JSON.parse(localStorage.getItem('user'));
+    if (user) {
+      if (user.name) document.getElementById('sellerName').value = user.name;
+      if (user.email) document.getElementById('sellerEmail').value = user.email;
+    }
+  });
+</script>
+
+
+</body>
+</html>

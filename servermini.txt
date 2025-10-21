@@ -1,0 +1,210 @@
+const express = require('express');
+const mysql = require('mysql');
+const bodyParser = require('body-parser');
+const cors = require('cors');
+const bcrypt = require('bcrypt');
+const session = require('express-session');
+
+const app = express();
+const port = 3000;
+const path = require('path');
+const projectDir = 'C:\\Users\\HP\\OneDrive\\mini project sem5';
+
+app.use(express.static(projectDir)); // serve CSS, images, etc.
+
+
+// CORS middleware — put this first
+app.use(cors({
+  origin: ['http://localhost:5501', 'http://127.0.0.1:5501'],
+  credentials: true
+}));
+app.use('/public', express.static('public'));
+
+// Body parser middleware — call only once
+app.use(bodyParser.json());
+
+// Session middleware
+app.use(session({
+  secret: 'your-secret-key',
+  resave: false,
+  saveUninitialized: false,
+  cookie: { 
+    secure: false,
+    httpOnly: true,
+    sameSite: 'false'
+   } // for development only; true for HTTPS production
+}));
+
+// MySQL connection
+const db = mysql.createConnection({
+  host: 'localhost',
+  user: 'root',
+  password: 'Thars-2005',
+  database: 'artisans'
+});
+
+db.connect(err => {
+  if (err) {
+    console.error('DB connection failed:', err.stack);
+    return;
+  }
+  console.log('Connected to MySQL');
+});
+
+// Create users table if not exists
+db.query(`
+  CREATE TABLE IF NOT EXISTS users (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    email VARCHAR(255) UNIQUE NOT NULL,
+    profile_pic LONGBLOB,
+    password VARCHAR(255) NOT NULL
+)
+`);
+app.listen(port, () => {
+  console.log(`Server running at http://localhost:${port}`);
+});
+app.get('/home', (req, res) => {
+  res.sendFile(path.join(projectDir, 'home.html'));
+});
+
+app.get('/login', (req, res) => {
+  res.sendFile(path.join(projectDir, 'login.html'));
+});
+
+app.get('/signup', (req, res) => {
+  res.sendFile(path.join(projectDir, 'signup.html'));
+});
+
+app.get('/changepass', (req, res) => {
+  res.sendFile(path.join(projectDir, 'changepass.html'));
+});
+
+// Categories route (dummy data for now)
+app.get('/categories', (req, res) => {
+  const categories = [
+    { name: 'Home Decor', description: 'Handmade items for your living spaces', link: 'd2.html' },
+    { name: 'Bamboo Art', description: 'Traditional bamboo creations', link: 'bamboo.html' },
+    { name: 'Embroidery', description: 'Ethnic and contemporary fashion', link: 'embroidary.html' },
+    { name: 'Paintings', description: 'Art that tells a story', link: 'painting.html' },
+    { name: 'Pottery', description: 'Clay creations steeped in heritage', link: 'pottery.html' }
+  ];
+  res.json(categories);
+});
+
+// Signup route
+app.post('/signup', (req, res) => {
+  const { name, email, password } = req.body;
+
+  // ==== Backend Password Validation ====
+  const passwordErrors = [];
+
+  if (!/[a-z]/.test(password)) passwordErrors.push("lowercase letter");
+  if (!/[A-Z]/.test(password)) passwordErrors.push("uppercase letter");
+  if (!/[0-9]/.test(password)) passwordErrors.push("number");
+  if (!/[!@#$%^&*(),.?\":{}|<>|\-]/.test(password)) passwordErrors.push("special character");
+  if (password.length < 8) passwordErrors.push("at least 8 characters");
+
+  if (passwordErrors.length > 0) {
+    return res.status(400).json({
+      message: "Password must include: " + passwordErrors.join(', ')
+    });
+  }
+
+  // ==== Proceed with hashing and inserting ====
+  bcrypt.hash(password, 10, (err, hashedPassword) => {
+    if (err) {
+      console.error('Error hashing password:', err);
+      return res.status(500).json({ message: 'Error processing request' });
+    }
+
+    db.query(
+      'INSERT INTO users (name, email, password) VALUES (?, ?, ?)',
+      [name, email, hashedPassword],
+      (err, result) => {
+        if (err) {
+          if (err.code === 'ER_DUP_ENTRY') {
+            return res.status(409).json({ message: 'User already exists' });
+          }
+          return res.status(500).json({ message: 'Database error', error: err });
+        }
+
+        res.status(201).json({ message: 'User created successfully' });
+      }
+    );
+  });
+});
+
+// Login route
+app.post('/login', (req, res) => {
+  const { email, password } = req.body;
+
+  db.query('SELECT * FROM users WHERE email = ?', [email], (err, results) => {
+    if (err) return res.status(500).json({ message: 'Database error' });
+    if (results.length === 0) return res.status(401).json({ message: 'Invalid email or password' });
+
+    const user = results[0];
+
+    bcrypt.compare(password, user.password, (err, isMatch) => {
+      if (err) return res.status(500).json({ message: 'Error comparing passwords' });
+      if (!isMatch) return res.status(401).json({ message: 'Invalid email or password' });
+      // 3. Store user data in session (excluding password)
+      req.session.userId = user.id;
+
+      res.status(200).json({ message: 'Login successful', name: user.name });
+    });
+  });
+});
+
+// ...existing code...
+app.get('/user', (req, res) => {
+  if (!req.session.userId) {
+    return res.status(401).json({ message: 'Not logged in' });
+  }
+  db.query('SELECT id, name, email, profile_pic FROM users WHERE id = ?', [req.session.userId], (err, results) => {
+    if (err || results.length === 0) {
+      return res.status(401).json({ message: 'User not found' });
+    }
+    const user = results[0];
+    let profilePicUrl = null;
+    if (user.profile_pic) {
+      // Convert buffer to base64 image URL
+      profilePicUrl = `data:image/jpeg;base64,${user.profile_pic.toString('base64')}`;
+    }
+    res.json({
+      id: user.id,
+      name: user.name,
+      email: user.email,
+      profilePicUrl
+    });
+  });
+});
+// ...existing code...
+// Profile picture upload
+app.post('/api/profile-pic', (req, res) => {
+  const userId = req.session.userId; // assuming sessions
+  const imageBase64 = req.body.image;
+
+  if (!userId || !imageBase64) {
+    return res.status(400).send('Missing data');
+  }
+
+  const sql = 'UPDATE users SET profile_pic = ? WHERE id = ?';
+  db.query(sql, [imageBase64, userId], (err, result) => {
+    if (err) {
+      console.error('Error saving image to DB:', err);
+      return res.status(500).send('Server error');
+    }
+    res.send('Profile picture saved');
+  });
+});
+
+
+app.post('/logout', (req, res) => {
+  req.session.destroy(err => {
+    if (err) return res.status(500).json({ message: 'Logout failed' });
+
+    res.clearCookie('connect.sid'); // clean up session cookie
+    res.json({ message: 'Logged out successfully' });
+  });
+});

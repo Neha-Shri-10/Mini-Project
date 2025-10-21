@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Admin Panel - Artisans Bazaar</title>
+  <style>
+    body { font-family: 'Segoe UI', sans-serif; background: #f8f9fa; margin: 0; padding: 0; }
+    h1 { text-align: center; color: #2c7a7b; margin: 20px 0; }
+    nav { text-align: center; background: #fff; padding: 10px; box-shadow: 0 2px 6px rgba(0,0,0,0.1); }
+    nav button {
+      margin: 5px; padding: 10px 16px; border: none; border-radius: 5px;
+      cursor: pointer; background: #007bff; color: white; font-weight: bold;
+    }
+    nav button:hover { background: #0056b3; }
+
+    .card {
+      background: #fff; padding: 15px; border-radius: 10px;
+      margin: 15px auto; max-width: 600px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+    img { max-width: 150px; margin-top: 10px; border-radius: 8px; }
+    .approve, .reject, .buy, .chat {
+      border: none; padding: 8px 12px; border-radius: 5px; color: white; cursor: pointer;
+      margin-right: 10px;
+    }
+    .approve { background: #28a745; }
+    .reject { background: #dc3545; }
+    .buy { background: #2c7a7b; }
+    .chat { background: #ff9800; }
+    .approve:hover { background: #218838; }
+    .reject:hover { background: #c82333; }
+    .buy:hover { background: #319795; }
+    .chat:hover { background: #f57c00; }
+
+    .form-section {
+      background: #fff; padding: 30px; border-radius: 10px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      max-width: 700px; margin: 30px auto;
+    }
+    .form-section h2 { color: #2c7a7b; margin-bottom: 20px; text-align: center; }
+    .form-section label { font-weight: bold; display: block; margin-bottom: 6px; color: #333; }
+    .form-section input, .form-section select, .form-section textarea {
+      width: 100%; padding: 10px; margin-bottom: 15px;
+      border: 1px solid #ccc; border-radius: 5px; font-size: 15px;
+    }
+    .form-section button {
+      background: #28a745; color: white; border: none;
+      padding: 12px 18px; border-radius: 6px; cursor: pointer; font-weight: bold;
+    }
+    .form-section button:hover { background: #218838; }
+  </style>
+</head>
+<body>
+  <h1>Admin Dashboard</h1>
+
+  <nav>
+    <button onclick="loadPending()">Pending Products</button>
+    <button onclick="loadAllProducts()">All Products</button>
+    <button onclick="loadSales()">Sales</button>
+    <button onclick="showAddForm()">Add Product</button>
+    <button onclick="loadOrders()">Orders</button>
+    <button onclick="showChangePassword()">Change Password</button>
+    <button onclick="logout()">Logout</button>
+  </nav>
+
+  
+<div id="content">
+  <h2>Orders</h2>
+  <table border="1" width="100%" cellspacing="0" cellpadding="5">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>User Email</th>
+        <th>Product ID</th>
+        <th>Quantity</th>
+        <th>Total Price</th>
+        <th>Payment</th>
+        <th>Address</th>
+        <th>Pincode</th>
+        <th>Order Date</th>
+        <th>Status</th>
+      </tr>
+    </thead>
+    <tbody id="ordersList"></tbody>
+  </table>
+</div>
+
+  <script>
+    if (localStorage.getItem("isAdmin") !== "true") {
+      window.location.href = "admin-login.html";
+    }
+
+    // --- Load Pending ---
+    async function loadPending() {
+      const res = await fetch("http://localhost:3000/admin/products/pending");
+      const products = await res.json();
+      renderProducts(products, true);
+    }
+
+    // --- Load All ---
+    async function loadAllProducts() {
+      const res = await fetch("http://localhost:3000/admin/products/all");
+      const products = await res.json();
+      renderProducts(products, false);
+    }
+    async function loadOrders() {
+  const res = await fetch("http://localhost:3000/admin/orders");
+  const orders = await res.json();
+
+  const container = document.getElementById("content");
+  container.innerHTML = "<h2>Orders</h2>";
+
+  if (orders.length === 0) {
+    container.innerHTML += "<p style='text-align:center;'>No orders yet.</p>";
+    return;
+  }
+
+  const table = document.createElement("table");
+  table.border = "1";
+  table.cellPadding = "5";
+  table.cellSpacing = "0";
+  table.style.width = "100%";
+
+  table.innerHTML = `
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>User Email</th>
+        <th>Product</th>
+        <th>Quantity</th>
+        <th>Total Price</th>
+        <th>Payment</th>
+        <th>Address</th>
+        <th>Pincode</th>
+        <th>Order Date</th>
+        <th>Status</th>
+      </tr>
+    </thead>
+    <tbody>
+      ${orders.map(o => `
+        <tr>
+          <td>${o.id}</td>
+          <td>${o.userEmail}</td>
+          <td>${o.productName || "N/A"}</td>
+          <td>${o.quantity}</td>
+          <td>${o.totalPrice}</td>
+          <td>${o.paymentMethod}</td>
+          <td>${o.address || "N/A"}</td>
+          <td>${o.pincode || "N/A"}</td>
+          <td>${new Date(o.orderDate).toLocaleString()}</td>
+          <td>${o.status || "Pending"}</td>
+        </tr>
+      `).join("")}
+    </tbody>
+  `;
+  container.appendChild(table);
+}
+
+
+
+
+
+    // --- Load Sales ---
+    async function loadSales() {
+      const res = await fetch("http://localhost:3000/admin/sales");
+      const sales = await res.json();
+      const container = document.getElementById("content");
+      container.innerHTML = "<h2>Sales Records</h2>";
+      sales.forEach(s => {
+        const div = document.createElement("div");
+        div.className = "card";
+        div.innerHTML = `
+          <p><b>Product:</b> ${s.productName}</p>
+          <p><b>Buyer:</b> ${s.buyerName} (${s.buyerEmail})</p>
+          <p><b>Quantity:</b> ${s.quantity}</p>
+          <p><b>Total Price:</b> $${s.totalPrice}</p>
+        `;
+        container.appendChild(div);
+      });
+    }
+
+    // --- Render Products ---
+    function renderProducts(products, isPending) {
+      const container = document.getElementById("content");
+      container.innerHTML = "";
+      if (products.length === 0) {
+        container.innerHTML = "<p style='text-align:center;'>No products found.</p>";
+        return;
+      }
+
+      products.forEach(p => {
+        const div = document.createElement("div");
+        div.className = "card";
+        div.innerHTML = `
+          <h3>${p.productName} (${p.productCategory})</h3>
+          <p>${p.productDescription}</p>
+          <p>Price: $${p.productPrice} | Qty: ${p.productQuantity}</p>
+          <img src="${p.productImage}" alt="Product image" />
+          <div style="margin-top:10px;">
+            ${isPending
+              ? `
+                <button class="approve" onclick="approveProduct(${p.id})">Approve</button>
+                <button class="reject" onclick="rejectProduct(${p.id})">Reject</button>
+              `
+              : `
+                <button class="reject" onclick="removeApprovedProduct(${p.id})">Remove</button>
+                <button class="buy" onclick="buyProduct(${p.id})">Buy</button>
+                <button class="chat" onclick="chatWithSeller('${p.sellerEmail}')">Chat</button>
+              `
+            }
+          </div>
+        `;
+        container.appendChild(div);
+      });
+    }
+
+    // --- Approve/Reject/Remove ---
+    async function approveProduct(id) {
+      const res = await fetch(`http://localhost:3000/admin/approve/${id}`, { method: "POST" });
+      const result = await res.json();
+      alert(result.message);
+      loadPending();
+    }
+
+    async function rejectProduct(id) {
+      const res = await fetch(`http://localhost:3000/admin/reject/${id}`, { method: "DELETE" });
+      const result = await res.json();
+      alert(result.message);
+      loadPending();
+    }
+
+    async function removeApprovedProduct(id) {
+      if (!confirm("Are you sure you want to remove this product?")) return;
+      const res = await fetch(`http://localhost:3000/admin/remove/${id}`, { method: "DELETE" });
+      const result = await res.json();
+      alert(result.message);
+      loadAllProducts();
+    }
+
+    // --- Logout ---
+    function logout() {
+      localStorage.removeItem("isAdmin");
+      window.location.href = "admin-login.html";
+    }
+
+    // --- Add Product Form ---
+    function showAddForm() {
+      const container = document.getElementById("content");
+      container.innerHTML = `
+        <div class="form-section">
+          <h2>Add New Product</h2>
+          <form id="addForm" enctype="multipart/form-data">
+            <label>Seller Name</label>
+            <input type="text" name="sellerName" required>
+
+            <label>Seller Email</label>
+            <input type="email" name="sellerEmail" required>
+
+            <label>Product Name</label>
+            <input type="text" name="productName" required>
+
+            <label>Description</label>
+            <textarea name="productDescription" required></textarea>
+
+            <label>Category</label>
+            <select name="productCategory" required>
+              <option value="">Select Category</option>
+              <option value="Bamboo Art">Bamboo Art</option>
+              <option value="Pottery">Pottery</option>
+              <option value="Woodwork">Woodwork</option>
+              <option value="Handloom">Handloom</option>
+              <option value="Jewellery">Jewellery</option>
+            </select>
+
+            <label>Price</label>
+            <input type="number" name="productPrice" min="1" required>
+
+            <label>Quantity</label>
+            <input type="number" name="productQuantity" min="1" required>
+
+            <label>Product Image</label>
+            <input type="file" name="productImage" accept="image/*" required>
+
+            <button type="submit">Add Product</button>
+          </form>
+        </div>
+      `;
+
+      const form = document.getElementById("addForm");
+      form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const formData = new FormData(form);
+
+        try {
+          const response = await fetch("http://localhost:3000/admin/add-product", {
+            method: "POST",
+            body: formData
+          });
+          const result = await response.json();
+          alert(result.message);
+          if (response.ok) loadAllProducts();
+        } catch (error) {
+          alert("Error adding product.");
+          console.error(error);
+        }
+      });
+    }
+    function showChangePassword() {
+  const container = document.getElementById("content");
+  container.innerHTML = `
+    <div class="form-section">
+      <h2>Change Admin Password</h2>
+      <form id="changePassForm">
+        <label>Username</label>
+        <input type="text" id="username" required placeholder="Enter your admin username">
+
+        <label>Current Password</label>
+        <input type="password" id="currentPassword" required placeholder="Enter current password">
+
+        <label>New Password</label>
+        <input type="password" id="newPassword" required placeholder="Enter new password">
+
+        <button type="submit">Update Password</button>
+      </form>
+    </div>
+  `;
+
+  const form = document.getElementById("changePassForm");
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    const data = {
+      username: document.getElementById("username").value,
+      currentPassword: document.getElementById("currentPassword").value,
+      newPassword: document.getElementById("newPassword").value
+    };
+
+    try {
+      const res = await fetch("http://localhost:3000/admin/change-password", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data)
+      });
+
+      const result = await res.json();
+      alert(result.message);
+      if (result.success) {
+        logout(); // Optionally log out admin after password change
+      }
+    } catch (err) {
+      alert("Error updating password");
+      console.error(err);
+    }
+  });
+}
+
+    // --- Redirects for Buy & Chat ---
+    function buyProduct(id) {
+      window.location.href = `buy.html?id=${id}`;
+    }
+
+    function chatWithSeller(email) {
+      window.location.href = `chat.html?seller=${encodeURIComponent(email)}`;
+    }
+  </script>
+</body>
+</html>

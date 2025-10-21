@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Customise Your Product</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #fdfdfd;
+      color: #333;
+      padding: 0;
+      margin: 0;
+    }
+    .container {
+      max-width: 500px;
+      margin: 80px auto;
+      background: #fff;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+      border-radius: 10px;
+      padding: 32px;
+    }
+    h2 {
+      color: #2c7a7b;
+      margin-bottom: 12px;
+      text-align: center;
+    }
+    label {
+      font-weight: 500;
+      margin-top: 15px;
+      display: block;
+    }
+    textarea, input[type="text"] {
+      width: 100%;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      padding: 10px;
+      margin-top: 7px;
+      font-size: 1em;
+      box-sizing: border-box;
+    }
+    button {
+      margin-top: 24px;
+      background: #2c7a7b;
+      color: #fff;
+      padding: 12px 24px;
+      border: none;
+      border-radius: 6px;
+      font-weight: 600;
+      font-size: 1em;
+      cursor: pointer;
+      width: 100%;
+      transition: background 0.3s;
+    }
+    button:hover {
+      background: #38b2ac;
+    }
+    .confirmation {
+      color: #28a745;
+      margin-top: 18px;
+      text-align: center;
+      font-weight: 500;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Request Customisation</h2>
+    <p id="productInfo"></p>
+    <form id="customForm" onsubmit="sendCustomRequest(event)">
+      <label for="customText">Describe your customisation request:</label>
+      <textarea id="customText" rows="5" placeholder="Describe any changes or requirements..."></textarea>
+      <button type="submit">Send Request</button>
+    </form>
+    <div class="confirmation" id="confirmationMsg"></div>
+  </div>
+  <script>
+    // Parse URL params for product and seller
+    const params = new URLSearchParams(window.location.search);
+    const product = params.get('product') || '';
+    const seller = params.get('seller') || '';
+
+    document.getElementById('productInfo').textContent = 
+      product ? `Product: ${product} | Seller: ${seller}` : 'No product selected.';
+
+    function sendCustomRequest(event) {
+      event.preventDefault();
+      const customText = document.getElementById('customText').value.trim();
+      if (!customText) {
+        alert('Please enter your customisation request.');
+        return;
+      }
+      // Here, you would send this info to your backend/database/email.
+      // For demo:
+      document.getElementById('confirmationMsg').textContent =
+        `Your customisation request has been sent to the seller (${seller}). They will respond soon.`;
+      document.getElementById('customForm').reset();
+    }
+  </script>
+</body>
+</html>

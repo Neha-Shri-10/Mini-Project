@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Checkout - Artisans Bazaar</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f9f9f9;
+      margin: 0;
+      padding: 0;
+      color: #333;
+    }
+    .container {
+      max-width: 800px;
+      margin: 40px auto;
+      padding: 20px;
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+    h2 {
+      color: #2c7a7b;
+      margin-bottom: 20px;
+    }
+    .summary, .form-section {
+      margin-bottom: 30px;
+    }
+    label {
+      display: block;
+      margin-bottom: 6px;
+      font-weight: 600;
+    }
+    input[type="text"], textarea {
+      width: 100%;
+      max-width: 100%;
+      padding: 10px;
+      font-size: 1em;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      margin-bottom: 15px;
+    }
+    .confirm-btn {
+      padding: 12px 24px;
+      font-size: 1em;
+      font-weight: 600;
+      color: white;
+      background-color: #38a169;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+    .confirm-btn:hover {
+      background-color: #2f855a;
+    }
+.cancel-btn {
+  padding: 12px 24px;
+  font-size: 1em;
+  font-weight: 600;
+  color: white;
+  background-color: #e53e3e;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  margin-left: 10px;
+  transition: background-color 0.3s;
+}
+.cancel-btn:hover {
+  background-color: #c53030;
+}
+
+    .product-info {
+      background: #edf2f7;
+      padding: 15px;
+      border-radius: 6px;
+    }
+    .product-info p {
+      margin: 5px 0;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Checkout</h2>
+
+    <!-- Product Summary -->
+    <div class="summary product-info">
+      <p><strong>Product:</strong> <span id="checkout-product"></span></p>
+      <p><strong>Quantity:</strong> <span id="checkout-qty"></span></p>
+      <p><strong>Price:</strong> ₹<span id="checkout-price"></span></p>
+      <p><strong>Total:</strong> ₹<span id="checkout-total"></span></p>
+    </div>
+
+    <!-- Address Form -->
+    <div class="form-section">
+      <label for="address">Shipping Address:</label>
+      <textarea id="address" rows="4" placeholder="Enter your full shipping address"></textarea>
+
+       <label for="pincode">Enter Pincode to check delivery:</label><br />
+       <input type="text" id="pincode" placeholder="e.g. 110011" maxlength="6" />
+       <span id="pincode-message" style="color: #e53e3e; font-weight: 500; margin-left: 10px;"></span>
+
+
+      <p><strong>Delivery by:</strong> <span id="delivery-estimate">Checking...</span></p>
+    </div>
+
+    <!-- Action Buttons -->
+<button class="confirm-btn" onclick="confirmOrder()">Confirm Order</button>
+<button class="cancel-btn" onclick="cancelOrder()">Cancel Order</button>
+
+  </div>
+
+
+<form id="checkoutForm">
+  <input type="text" name="address" placeholder="Delivery Address" required />
+  <input type="text" name="pincode" placeholder="Pincode" required />
+  <button type="submit">Place Order</button>
+</form>
+
+<script>
+document.getElementById("checkoutForm").addEventListener("submit", async (e) => {
+  e.preventDefault();
+
+  const userEmail = localStorage.getItem("userEmail");
+  const productId = localStorage.getItem("orderProductId");
+  const quantity = parseInt(localStorage.getItem("orderQty"));
+  const totalPrice =
+    parseFloat(localStorage.getItem("orderPrice")) * quantity;
+  const paymentMethod = localStorage.getItem("orderPayment");
+
+  const address = e.target.address.value;
+  const pincode = e.target.pincode.value;
+
+  if (!userEmail) {
+    alert("Please log in before placing an order.");
+    return;
+  }
+
+  try {
+    const res = await fetch("http://localhost:3000/orders", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        userEmail,
+        productId,
+        quantity,
+        totalPrice,
+        paymentMethod,
+        address,
+        pincode,
+      }),
+    });
+
+    const data = await res.json();
+    if (res.ok) {
+      alert("Order placed successfully!");
+      localStorage.removeItem("orderProductId");
+      localStorage.removeItem("orderQty");
+      localStorage.removeItem("orderPrice");
+      localStorage.removeItem("orderPayment");
+      window.location.href = "home.html";
+    } else {
+      alert(data.message || "Order failed.");
+    }
+  } catch (err) {
+    console.error(err);
+    alert("Server error, please try again.");
+  }
+});
+</script>
+
+   </body>
+</html>
